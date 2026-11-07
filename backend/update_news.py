@@ -24,9 +24,8 @@ def update_news():
     collection=db.collection("job_scam_news") #saved here
     for article in articles:
         url=article["url"]
-        document_id=hashlib.sha256(
-            url.encode("utf-8")
-        ).hexdigest()
+        document_id=hashlib.sha256(url.encode("utf-8")).hexdigest()
+        article["updated_at"]=firestore.SERVER_TIMESTAMP #store record in firestore only
         collection.document(document_id).set(article)
     print(f"Retrieved and saved {len(articles)} articles.")
     documents=list(collection.stream()) #retrieve all stored articles
